@@ -1,0 +1,26 @@
+<!-- This footer should hidden by default and shown when there are todos -->
+
+@if(hasTodos){
+<footer class="footer">
+  <span class="todo-count"
+    ><strong>{{ pendingTask }}</strong> Tareas pendientes</span
+  >
+  <ul class="filters">
+    @for(filter of filters; track filter.id){
+    <li>
+      <a
+        class="pointer"
+        [ngClass]="{ selected: filterSelected === filter.filterType }"
+        (click)="changeFilter(filter.filterType)"
+        >{{ filter.desc }}</a
+      >
+    </li>
+    }
+  </ul>
+  @if(hasCompletedTask){
+  <button class="clear-completed" (click)="cleanComplete()">
+    Limpiar completados
+  </button>
+  }
+</footer>
+}

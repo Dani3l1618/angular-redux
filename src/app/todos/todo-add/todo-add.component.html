@@ -1,0 +1,6 @@
+<header class="header">
+  <h1>todos</h1>
+  <form [formGroup]="todoForm" (submit)="addTodo()">
+    <input class="new-todo" placeholder="¿Qué quieres hacer?" autofocus formControlName="text">
+  </form>
+</header>
