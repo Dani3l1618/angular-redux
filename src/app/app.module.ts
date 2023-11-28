@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { RouterModule } from '@angular/router';
-import { AppRoutingModule } from './app-routing.module';
+
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -13,6 +17,9 @@ import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.componen
 import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
+
+import { environment } from '../environments/environment.development';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +34,15 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     NavbarComponent,
     SidebarComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, RouterModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    RouterModule,
+    ReactiveFormsModule,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
