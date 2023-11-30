@@ -6,8 +6,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from '@angular/fire/auth';
-import { Firestore, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
+import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
+import { AppState } from '../app.reducer';
+import { setUser, unsetUser } from '../auth/auth.actions';
 import { Usuario } from '../models/usuario.model';
 
 @Injectable({
@@ -16,12 +19,24 @@ import { Usuario } from '../models/usuario.model';
 export class AuthService {
   private auth: Auth = inject(Auth);
   private fireStore = inject(Firestore);
+  private store: Store<AppState> = inject(Store);
 
   constructor() {}
 
   initAuthListener() {
-    authState(this.auth).subscribe((fuser) => {
-      console.log(fuser);
+    authState(this.auth).subscribe(async (fuser) => {
+      if (fuser) {
+        const docRef = doc(this.fireStore, `${fuser.uid}/usuario`);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const { name, uid, email } = docSnap.data();
+          const user = new Usuario(uid, name, email);
+          this.store.dispatch(setUser({ user }));
+        }
+      } else {
+        this.store.dispatch(unsetUser());
+      }
     });
   }
 
