@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
 import { AppState } from '../app.reducer';
 import { setUser, unsetUser } from '../auth/auth.actions';
+import { unsetItems } from '../ingreso-egreso/ingreso-egreso.actions';
 import { Usuario } from '../models/usuario.model';
 
 @Injectable({
@@ -36,6 +37,7 @@ export class AuthService {
         }
       } else {
         this.store.dispatch(unsetUser());
+        this.store.dispatch(unsetItems());
       }
     });
   }

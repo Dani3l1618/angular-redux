@@ -23,6 +23,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment.development';
 import { AppRoutingModule } from './app-routing.module';
 import { appReducers } from './app.reducer';
+import { ChartComponent } from './ingreso-egreso/estadistica/chart/chart.component';
+import { RegisterTypePipe } from './pipes/register-type.pipe';
+import { SortTypesPipe } from './pipes/sort-types.pipe';
 
 @NgModule({
   declarations: [
@@ -36,8 +39,11 @@ import { appReducers } from './app.reducer';
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
+    RegisterTypePipe,
+    SortTypesPipe,
   ],
   imports: [
+    ChartComponent,
     BrowserModule,
     AppRoutingModule,
     RouterModule,

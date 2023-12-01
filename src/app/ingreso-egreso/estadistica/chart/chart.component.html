@@ -1,0 +1,16 @@
+<div class="card card-statistics">
+  <div class="card-body">
+    <h1 class="card-title">Gráfica</h1>
+
+    <div style="display: block">
+      @if(data){
+      <canvas
+        baseChart
+        class="chart"
+        [data]="data"
+        [type]="graphicType"
+      ></canvas>
+      }
+    </div>
+  </div>
+</div>
