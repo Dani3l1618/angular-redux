@@ -43,7 +43,6 @@ export class LoginComponent {
 
   login() {
     if (this.loginForm.invalid) return;
-    console.log('dispatching');
     this.store.dispatch(ui.isLoading());
 
     // Swal.fire({
