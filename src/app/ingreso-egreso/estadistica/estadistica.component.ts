@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../app.reducer';
+import { AppStateWithIngresoEgresoState } from '../../app.reducer';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
 import { COMMON_INGRESS_MODULE } from '../ingreso-egreso.shared';
 import { ChartComponent } from './chart/chart.component';
@@ -23,7 +23,7 @@ import { ChartComponent } from './chart/chart.component';
   imports: [COMMON_INGRESS_MODULE, ChartComponent],
 })
 export class EstadisticaComponent implements OnInit {
-  private store: Store<AppState> = inject(Store);
+  private store: Store<AppStateWithIngresoEgresoState> = inject(Store);
   private destroyRef = inject(DestroyRef);
 
   registers: WritableSignal<IngresoEgreso[]> = signal([]);

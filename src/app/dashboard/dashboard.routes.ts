@@ -1,10 +1,19 @@
+import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { ingresoEgreoReducer } from '../ingreso-egreso/ingreso-egreso.reducer';
 import { DashboardComponent } from './dashboard.component';
 
 const dashboardRoutes: Routes = [
   {
     path: '',
     component: DashboardComponent,
+    providers: [
+      importProvidersFrom(
+        StoreModule.forFeature('ingresosEgresos', ingresoEgreoReducer)
+      ),
+    ],
+
     children: [
       {
         path: '',

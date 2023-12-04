@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import Swal from 'sweetalert2';
-import { AppState } from '../../app.reducer';
+import { AppStateWithIngresoEgresoState } from '../../app.reducer';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
 import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
 import { COMMON_INGRESS_MODULE } from '../ingreso-egreso.shared';
@@ -15,7 +15,7 @@ import { COMMON_INGRESS_MODULE } from '../ingreso-egreso.shared';
   imports: [COMMON_INGRESS_MODULE],
 })
 export class DetalleComponent {
-  private store: Store<AppState> = inject(Store);
+  private store: Store<AppStateWithIngresoEgresoState> = inject(Store);
   private ingresoEgresoService = inject(IngresoEgresoService);
 
   ingresosEgresos: IngresoEgreso[] = [];
