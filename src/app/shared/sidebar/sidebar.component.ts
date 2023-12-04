@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../app.reducer';
 import { AuthService } from '../../services/auth.service';
@@ -9,6 +9,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styles: ``,
+  standalone: true,
+  imports: [RouterModule],
 })
 export class SidebarComponent implements OnInit {
   private authService: AuthService = inject(AuthService);
@@ -28,6 +30,6 @@ export class SidebarComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout().then(() => this.router.navigate(['/login']));
+    this.authService.logout().then(() => this.router.navigate(['/auth/login']));
   }
 }

@@ -7,6 +7,7 @@ import { AppState } from '../../app.reducer';
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styles: ``,
+  standalone: true,
 })
 export class NavbarComponent implements OnInit {
   private store: Store<AppState> = inject(Store);

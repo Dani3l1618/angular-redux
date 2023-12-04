@@ -3,6 +3,7 @@ import { RegisterType } from '../models/ingreso-egreso.model';
 
 @Pipe({
   name: 'registerType',
+  standalone: true,
 })
 export class RegisterTypePipe implements PipeTransform {
   transform(type: RegisterType): string {

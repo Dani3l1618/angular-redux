@@ -5,11 +5,14 @@ import Swal from 'sweetalert2';
 import { AppState } from '../../app.reducer';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
 import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
+import { COMMON_INGRESS_MODULE } from '../ingreso-egreso.shared';
 
 @Component({
   selector: 'app-detalle',
   templateUrl: './detalle.component.html',
   styles: ``,
+  standalone: true,
+  imports: [COMMON_INGRESS_MODULE],
 })
 export class DetalleComponent {
   private store: Store<AppState> = inject(Store);

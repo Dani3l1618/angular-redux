@@ -12,11 +12,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../app.reducer';
 import { IngresoEgreso } from '../../models/ingreso-egreso.model';
+import { COMMON_INGRESS_MODULE } from '../ingreso-egreso.shared';
+import { ChartComponent } from './chart/chart.component';
 
 @Component({
   selector: 'app-estadistica',
   templateUrl: './estadistica.component.html',
   styles: ``,
+  standalone: true,
+  imports: [COMMON_INGRESS_MODULE, ChartComponent],
 })
 export class EstadisticaComponent implements OnInit {
   private store: Store<AppState> = inject(Store);

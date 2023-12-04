@@ -75,7 +75,10 @@
     </div>
   </div>
 
-  <div class="col-12 p-5" *ngIf="incomes().length > 0 || expenses().length > 0">
-    <chart-doughnut [labels]="chartLabels" [dataGraph]="series()" />
-  </div>
+  @if(incomes().length > 0 || expenses().length > 0){
+    <div class="col-12 p-5">
+      <chart-doughnut [labels]="chartLabels" [dataGraph]="series()" />
+    </div>
+  }
+  
 </div>

@@ -10,11 +10,14 @@ import Swal from 'sweetalert2';
 import { AppState } from '../../app.reducer';
 import { AuthService } from '../../services/auth.service';
 import * as ui from '../../shared/ui.actions';
+import { COMMON_AUTH_MODULES } from '../auth.shared';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styles: ``,
+  standalone: true,
+  imports: [COMMON_AUTH_MODULES],
 })
 export class LoginComponent {
   private fb: FormBuilder = inject(FormBuilder);

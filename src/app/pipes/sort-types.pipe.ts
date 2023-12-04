@@ -3,6 +3,7 @@ import { IngresoEgreso } from '../models/ingreso-egreso.model';
 
 @Pipe({
   name: 'sortTypes',
+  standalone: true,
 })
 export class SortTypesPipe implements PipeTransform {
   transform(items: IngresoEgreso[]): IngresoEgreso[] {

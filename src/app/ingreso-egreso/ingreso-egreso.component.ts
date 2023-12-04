@@ -10,6 +10,7 @@ import { IngresoEgreso, RegisterType } from '../models/ingreso-egreso.model';
 import * as ui from '../shared/ui.actions';
 
 import { IngresoEgresoService } from '../services/ingreso-egreso.service';
+import { COMMON_INGRESS_MODULE } from './ingreso-egreso.shared';
 
 @Component({
   selector: 'app-ingreso-egreso',
@@ -22,6 +23,8 @@ import { IngresoEgresoService } from '../services/ingreso-egreso.service';
       opacity:0.5;
     }
   `,
+  standalone: true,
+  imports: [COMMON_INGRESS_MODULE],
 })
 export class IngresoEgresoComponent {
   private fb = inject(FormBuilder);
@@ -70,9 +73,7 @@ export class IngresoEgresoComponent {
   async addRegister(register: IngresoEgreso) {
     this.store.dispatch(ui.isLoading());
     try {
-      const response = await this.ingresoEgresoService.crearIngresoEgreso(
-        register
-      );
+      await this.ingresoEgresoService.crearIngresoEgreso(register);
       this.registerForm.reset();
     } catch (e) {
       Swal.fire('Error al crear registro', String(e), 'error');

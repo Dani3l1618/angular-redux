@@ -1,10 +1,34 @@
 import { Routes } from '@angular/router';
-import { DetalleComponent } from '../ingreso-egreso/detalle/detalle.component';
-import { EstadisticaComponent } from '../ingreso-egreso/estadistica/estadistica.component';
-import { IngresoEgresoComponent } from '../ingreso-egreso/ingreso-egreso.component';
+import { DashboardComponent } from './dashboard.component';
 
-export const dashboardRoutes: Routes = [
-  { path: '', component: EstadisticaComponent },
-  { path: 'ingreso-egreso', component: IngresoEgresoComponent },
-  { path: 'detalle', component: DetalleComponent },
+const dashboardRoutes: Routes = [
+  {
+    path: '',
+    component: DashboardComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('../ingreso-egreso/estadistica/estadistica.component').then(
+            (c) => c.EstadisticaComponent
+          ),
+      },
+      {
+        path: 'ingreso-egreso',
+        loadComponent: () =>
+          import('../ingreso-egreso/ingreso-egreso.component').then(
+            (c) => c.IngresoEgresoComponent
+          ),
+      },
+      {
+        path: 'detalle',
+        loadComponent: () =>
+          import('../ingreso-egreso/detalle/detalle.component').then(
+            (c) => c.DetalleComponent
+          ),
+      },
+    ],
+  },
 ];
+
+export default dashboardRoutes;

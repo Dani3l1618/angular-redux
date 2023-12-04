@@ -5,12 +5,16 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import * as ingresoEgresoActions from '../ingreso-egreso/ingreso-egreso.actions';
 
+import { RouterModule } from '@angular/router';
 import { IngresoEgresoService } from '../services/ingreso-egreso.service';
+import { SHARED_COMPONENTS } from '../shared';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styles: ``,
+  standalone: true,
+  imports: [SHARED_COMPONENTS, RouterModule],
 })
 export class DashboardComponent implements OnInit {
   private ingresoEgresoService = inject(IngresoEgresoService);
