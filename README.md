@@ -1,27 +1,106 @@
-# AngularRedux
+# NGRX usando effects
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+Los efectos son acciones que se disparan al momento de nosotros disparar un action. 
 
-## Development server
+En esta sección usamos efectos para llamar a una API. Y al estar en Angular 17, se usaron standalone compoents y effectFunctions. 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Para más información ver la [docu](https://ngrx.io/guide/effects).
 
-## Code scaffolding
+## ¿Cómo funciona?
+Nosotros tenemos acciones, por ejemplo, "Cargar Usuario", al hacer un dispatch de esta acción, se dispara el efecto porque al configurar el efecto le decimos que escuche a ese evento. 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Luego, en el mismo efecto, disparamos las acciones "Usuario cargado success" o "Usuario Cargado error".
 
-## Build
+Para que el effect solo escuche una acción, usamos un pipe que nos da la librería que se llama "ofType":
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+``` typescript
+import { inject } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, exhaustMap, map, of } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import {
+  cargarUsuario,
+  cargarUsuarioError,
+  cargarUsuarioSuccess,
+} from '../actions';
 
-## Running unit tests
+// A mi se me hizo bueno separar al observable que obtiene al usuario. El observable viene del servicio y lo mapeamos para que dispare una acción en cuanto se cargue el usuario de la API o emita la acción de error.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+const user$ = (id: string, userService: UserService) => {
+  return userService.getUser(id).pipe(
+    map((user) => cargarUsuarioSuccess({ user })),
+    catchError((error) => of(cargarUsuarioError({ payload: error })))
+  );
+};
 
-## Running end-to-end tests
+// Este es el effect, y es el que se agregar en el provider del app. Nota que la función *createEffect* recibe dos servicios injectados (gracias a la versión de Angular) y retornamos el action pero transformado por los pipes. 
+// Nota: podemos usar diferentes pipes en vez de  exhaustMap, todo depende de nuestra necesidad, el operador debe retornar un observable. ver docu.
+//Por último, al ser una effectFunction, se debe agregar un parámetro extra: {functional: true}
+export const loadUser = createEffect(
+  (action$ = inject(Actions), userService = inject(UserService)) => {
+    return action$.pipe(
+      ofType(cargarUsuario),
+      exhaustMap(({ id }) => user$(id, userService))
+    );
+  },
+  { functional: true }
+);
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
 
-## Further help
+Para que angular sepa de nuestros efectos, los pasamos en el provider:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```typescript
+
+import { Provider } from '@angular/core';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+
+import { appReducers } from './store/app.reducers';
+// import { UsuariosEffects } from './store/effects/usuarios.effects';
+
+// Asi se debe importar a los efects, estos estan en un idex.ts
+import * as userEffects from './store/effects';
+
+export const APP_PROVIDER: Provider = [
+  provideStore(appReducers),
+
+  provideEffects(userEffects),
+  // provideEffects(UsuariosEffects), //Si se requiere usar una class Effect
+];
+```
+
+### ClassEfect
+
+En versiones antiguas se puede usar una clase (o servicio), con el decorador @Injectable.
+
+``` typescript
+
+import { Injectable, inject } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { EMPTY, catchError, exhaustMap, map, of } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import * as userActions from '../actions';
+
+@Injectable()
+export class UsuariosEffects {
+  private actions$ = inject(Actions);
+  private userService = inject(UserService);
+
+  private getUser$ = this.userService.getUsers().pipe(
+    map((users) => userActions.cargarUsuariosSuccess({ users })),
+    catchError((error) =>
+      of(userActions.cargarUsuariosError({ payload: error }))
+    )
+  );
+
+  loadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userActions.cargarUsuarios),
+      exhaustMap(() => this.getUser$),
+      catchError(() => EMPTY)
+    )
+  );
+}
+
+```
