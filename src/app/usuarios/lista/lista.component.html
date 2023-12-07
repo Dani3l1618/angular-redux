@@ -1,20 +1,43 @@
-<div class="row row-cols-1 row-cols-md-3 g-3 mx-0">
-  @for (user of users; track user.id) {
+@if(loading){
+<!-- <ng-container [ngTemplateOutlet]="loadingTemplate"></ng-container> -->
+<app-alert message="Cargando..."
+  ><p><i class="fa fa-sync fa-spin fa-2x"></i></p
+></app-alert>
+}@else if(error){
+<app-alert message="Error" type="alert-danger">
+  <pre>
+      {{ error | json }}
+    </pre
+  >
+</app-alert>
+}@else {
+<ng-container [ngTemplateOutlet]="table"></ng-container>
+}
+
+<ng-template #table>
+  <div class="row row-cols-1 row-cols-md-3 g-3 mx-0">
+    @for (user of users; track user.id) {
     <div class="col">
       <div class="card h-100">
-        <img [src]="user.avatar" class="card-img-top" [alt]="user.first_name">
+        <img [src]="user.avatar" class="card-img-top" [alt]="user.first_name" />
         <div class="card-body">
-          <h5 class="card-title">{{user.first_name +' '+ user.last_name}}</h5>
+          <h5 class="card-title">
+            {{ user.first_name + " " + user.last_name }}
+          </h5>
           <p class="card-text">
-          <span class="text-muted">ID: {{user.id}}</span>
+            <span class="text-muted">ID: {{ user.id }}</span>
           </p>
-          <p class="card-text">{{user.email}}
-          </p>
+          <p class="card-text">{{ user.email }}</p>
         </div>
       </div>
     </div>
-  }@empty {
-    <h2>No hay información para mostrar</h2>
-  }
-  
-</div>
+    }@empty {
+    <div class="w-100">
+      <app-alert message="No hay información para mostrar"
+        ><p><i class="fa-regular fa-folder-open fa-2x"></i></p>
+      </app-alert>
+    </div>
+
+    }
+  </div>
+</ng-template>

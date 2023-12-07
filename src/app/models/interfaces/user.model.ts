@@ -9,3 +9,10 @@ export interface User {
 }
 
 export type PaginatedUser = Paginated<User>;
+export type SingleUser = {
+  data: User;
+  support: {
+    url: string;
+    text: string;
+  };
+};
